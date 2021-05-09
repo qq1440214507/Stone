@@ -11,13 +11,13 @@ import java.util.regex.Pattern;
  * 词法解析器
  */
 public class Lexer {
-    //词法正则
+    //词法正则  \s 空格 //.*  //开始的任意长度的字符串 ("(\\"|\\\\|\\n|[^"])*") 字符串
     public static String regexPat = "\\s*((//.*)|([0-9]+)|(\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\")|[A-Z_a-z][A-Z_a-z0-9]*|==|>=|<=|&&|\\|\\||\\p{Punct})?";
-    private Pattern pattern = Pattern.compile(regexPat);
+    private final Pattern pattern = Pattern.compile(regexPat);
     //词法队列
-    private ArrayList<Token> queue = new ArrayList<>();
+    private final ArrayList<Token> queue = new ArrayList<>();
     private boolean hasMore;
-    private LineNumberReader reader;
+    private final LineNumberReader reader;
 
     public Lexer(Reader reader) {
         this.hasMore = true;
@@ -76,13 +76,15 @@ public class Lexer {
     }
 
     protected void addToken(int lineNo, Matcher matcher) {
+        //组0代表整个正则
+        // ((//.*)|([0-9]+)|("(\\"|\\\\|\\n|[^"])*")|[A-Z_a-z][A-Z_a-z0-9]*|==|>=|<=|&&|\|\||\p{Punct}) 组1的正则表达式
         String m = matcher.group(1);
         if (m != null) {
-            if (matcher.group(2) == null) {
+            if (matcher.group(2) == null) { // 组2正则表达式 //.* 这个代表注释
                 Token token;
-                if (matcher.group(3) != null)
+                if (matcher.group(3) != null) //组3正则表达式 [0-9]+ 数字
                     token = new NumToken(lineNo, Integer.parseInt(m));
-                else if (matcher.group(4) != null)
+                else if (matcher.group(4) != null) // 组4正则表达式 \\"|\\\\|\\n|[^"])*" 代表字符串字面量
                     token = new StrToken(lineNo, toStringLiteral(m));
                 else
                     token = new IdToken(lineNo, m);
