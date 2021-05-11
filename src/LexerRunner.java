@@ -1,5 +1,4 @@
 
-import stone.CodeDialog;
 import stone.Lexer;
 import stone.ParseException;
 import stone.Token;
