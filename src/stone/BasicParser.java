@@ -37,7 +37,9 @@ public class BasicParser {
         reserved.add(";");
         reserved.add("}");
         reserved.add(Token.EOL);
-
+         //Operators 标识左结合还是右结合 也就是优先级
+        // 1 + 2 + 3
+        //左结合为：（1+2）+3
         operators.add("=",1,Operators.RIGHT);
         operators.add("==",2,Operators.LEFT);
         operators.add(">",2,Operators.LEFT);
