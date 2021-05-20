@@ -68,7 +68,7 @@ public class Parser {
         }
 
         protected void insert(Parser parser) {
-            Parser[] newParsers = new Parser[this.parsers.length - 1];
+            Parser[] newParsers = new Parser[this.parsers.length + 1];
             newParsers[0] = parser;
             System.arraycopy(parsers, 0, newParsers, 1, parsers.length);
             parsers = newParsers;
